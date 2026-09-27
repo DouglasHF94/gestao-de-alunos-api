@@ -1,6 +1,5 @@
 import request from 'supertest';
 import { expect } from 'chai';
-import mongoose from 'mongoose';
 
 import app from '../src/app.js';
 
@@ -13,10 +12,6 @@ describe('Fluxo completo de gestão de aluno', () => {
   let tokenAdmin;
   let tokenAluno;
   let alunoId;
-
-  after(async () => {
-    await mongoose.connection.close();
-  });
 
   it('deve fazer login como administrador', async () => {
     tokenAdmin = await loginAdmin();
