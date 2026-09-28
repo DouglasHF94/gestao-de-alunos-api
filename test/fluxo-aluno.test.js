@@ -27,10 +27,16 @@ describe('Fluxo completo de gestão de aluno', () => {
       .send(dados.aluno);
 
     expect(resposta.status).to.equal(201);
+    expect(resposta.body).to.have.property('id');
 
-    expect(resposta.body).to.have.property('_id');
+    alunoId = resposta.body.id;
 
-    alunoId = resposta.body._id;
+    const matricula = await request(app)
+      .post(`/api/admin/disciplinas/${dados.trabalho.disciplinaId}/matriculas`)
+      .set('Authorization', `Bearer ${tokenAdmin}`)
+      .send({ alunoId });
+
+    expect(matricula.status).to.equal(201);
   });
 
   it('deve fazer login como aluno', async () => {
@@ -55,13 +61,12 @@ describe('Fluxo completo de gestão de aluno', () => {
 
     expect(resposta.status).to.equal(201);
 
-    expect(resposta.body).to.have.property('_id');
+    expect(resposta.body).to.have.property('id');
     expect(resposta.body.alunoId).to.equal(alunoId);
-    expect(resposta.body.disciplinaId)
-      .to.equal(dados.trabalho.disciplinaId);
-    expect(resposta.body.titulo)
-      .to.equal(dados.trabalho.titulo);
-    expect(resposta.body.status)
-      .to.equal('entregue');
+    expect(resposta.body.disciplinaId).to.equal(
+      dados.trabalho.disciplinaId
+    );
+    expect(resposta.body.titulo).to.equal(dados.trabalho.titulo);
+    expect(resposta.body.status).to.equal('entregue');
   });
 });

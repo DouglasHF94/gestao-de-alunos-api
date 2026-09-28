@@ -133,6 +133,4 @@ export async function seed() {
   await seedTrabalhos();
 }
 
-await seed();
-
 export default { seed };
